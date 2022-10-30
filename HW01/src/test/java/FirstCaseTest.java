@@ -17,10 +17,10 @@ public class FirstCaseTest {
     protected static WebDriver driver;
     private Logger logger = LogManager.getLogger(FirstCaseTest.class);
 
-    // Чтение передаваемого параметра browser (-Dbrowser)
+    // Р§С‚РµРЅРёРµ РїРµСЂРµРґР°РІР°РµРјРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° browser (-Dbrowser)
     String env = System.getProperty("browser", "chrome");
 
-    //Чтение передаваемого параметра loadStrategy (-DloadStrategy)
+    //Р§С‚РµРЅРёРµ РїРµСЂРµРґР°РІР°РµРјРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° loadStrategy (-DloadStrategy)
     String loadStrategy = System.getProperty("loadStrategy", "normal");
 
     @BeforeEach
@@ -29,38 +29,38 @@ public class FirstCaseTest {
         logger.info("load strategy = " + loadStrategy);
         driver = WebDriverFactory.getDriver(env.toLowerCase(), loadStrategy.toUpperCase());
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        logger.info("Драйвер стартовал");
+        logger.info("Р”СЂР°Р№РІРµСЂ СЃС‚Р°СЂС‚РѕРІР°Р»");
     }
 
     @AfterEach
     public void setDown() {
         if (driver != null) {
             driver.quit();
-            logger.info("Драйвер остановлен!");
+            logger.info("Р”СЂР°Р№РІРµСЂ РѕСЃС‚Р°РЅРѕРІР»РµРЅ!");
         }
     }
 
     @Test
     public void categoriesTest() {
 
-        //Открыть страницу DNS
+        //РћС‚РєСЂС‹С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ DNS
         driver.get("https://www.dns-shop.ru/");
 
-        //Вывести в логи:
-        //заголовок страницы
+        //Р’С‹РІРµСЃС‚Рё РІ Р»РѕРіРё:
+        //Р·Р°РіРѕР»РѕРІРѕРє СЃС‚СЂР°РЅРёС†С‹
         String title = driver.getTitle();
 
-        //текущий URL
+        //С‚РµРєСѓС‰РёР№ URL
         logger.info("Title: " + title);
         String url = driver.getCurrentUrl();
 
-        //размеры окна браузера
+        //СЂР°Р·РјРµСЂС‹ РѕРєРЅР° Р±СЂР°СѓР·РµСЂР°
         logger.info("Url: " + url);
         Dimension size = driver.manage().window().getSize();
         logger.info("Window size: " + size);
 
-        //Нажать кнопку Всё верно
-        WebElement allRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        //РќР°Р¶Р°С‚СЊ РєРЅРѕРїРєСѓ Р’СЃС‘ РІРµСЂРЅРѕ
+        WebElement allRight = driver.findElement(By.xpath("//span[text()='Р’СЃС‘ РІРµСЂРЅРѕ']"));
         allRight.click();
         try {
             Thread.sleep(2000);
@@ -68,44 +68,44 @@ public class FirstCaseTest {
             e.printStackTrace();
         }
 
-        //Перейти по ссылке Бытовая техника
-        WebElement appliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
+        //РџРµСЂРµР№С‚Рё РїРѕ СЃСЃС‹Р»РєРµ Р‘С‹С‚РѕРІР°СЏ С‚РµС…РЅРёРєР°
+        WebElement appliances = driver.findElement(By.xpath("//a[text()='Р‘С‹С‚РѕРІР°СЏ С‚РµС…РЅРёРєР°']"));
         appliances.click();
 
-        //Проверить, что отображается текст Бытовая кухня
-        WebElement appliancesTitle = driver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
-        Assertions.assertTrue(appliancesTitle.isDisplayed(), "Заголовок не отображается!");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ С‚РµРєСЃС‚ Р‘С‹С‚РѕРІР°СЏ РєСѓС…РЅСЏ
+        WebElement appliancesTitle = driver.findElement(By.xpath("//h1[text()='Р‘С‹С‚РѕРІР°СЏ С‚РµС…РЅРёРєР°']"));
+        Assertions.assertTrue(appliancesTitle.isDisplayed(), "Р—Р°РіРѕР»РѕРІРѕРє РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ!");
 
-        //Перейти по ссылке Техника для кухни
-        WebElement kitchenAppliances = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
+        //РџРµСЂРµР№С‚Рё РїРѕ СЃСЃС‹Р»РєРµ РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё
+        WebElement kitchenAppliances = driver.findElement(By.xpath("//span[text()='РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё']"));
         kitchenAppliances.click();
 
-        //Проверить, что отображается текст Техника для кухни
-        WebElement kitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
-        Assertions.assertTrue(kitchenAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ С‚РµРєСЃС‚ РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё
+        WebElement kitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё']"));
+        Assertions.assertTrue(kitchenAppliancesTitle.isDisplayed(), "Р—Р°РіРѕР»РѕРІРѕРє РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ!");
 
-        //Проверить, что отображается ссылка Собрать свою кухню
-        WebElement makeKitchen = driver.findElement(By.xpath("//a[text()='Собрать свою кухню']"));
-        Assertions.assertTrue(makeKitchen.isDisplayed(), "Ссылка не отображается");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ СЃСЃС‹Р»РєР° РЎРѕР±СЂР°С‚СЊ СЃРІРѕСЋ РєСѓС…РЅСЋ
+        WebElement makeKitchen = driver.findElement(By.xpath("//a[text()='РЎРѕР±СЂР°С‚СЊ СЃРІРѕСЋ РєСѓС…РЅСЋ']"));
+        Assertions.assertTrue(makeKitchen.isDisplayed(), "РЎСЃС‹Р»РєР° РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ");
 
-        //Вывести в логи названия всех категорий
+        //Р’С‹РІРµСЃС‚Рё РІ Р»РѕРіРё РЅР°Р·РІР°РЅРёСЏ РІСЃРµС… РєР°С‚РµРіРѕСЂРёР№
         List<WebElement> allCategories = driver.findElements(By.xpath("//div[@class='subcategory__item-container ']//span"));
         for (WebElement category : allCategories) {
-            logger.info("Категория: " + category.getText());
+            logger.info("РљР°С‚РµРіРѕСЂРёСЏ: " + category.getText());
         }
 
-        //Проверить, что количество категорий больше 5
-        Assertions.assertTrue(allCategories.size() > 5, "Количество категорий меньше или равно 5");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РєРѕР»РёС‡РµСЃС‚РІРѕ РєР°С‚РµРіРѕСЂРёР№ Р±РѕР»СЊС€Рµ 5
+        Assertions.assertTrue(allCategories.size() > 5, "РљРѕР»РёС‡РµСЃС‚РІРѕ РєР°С‚РµРіРѕСЂРёР№ РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 5");
     }
 
     @Test
     public void cookingTest() {
 
-        //Открыть страницу DNS
+        //РћС‚РєСЂС‹С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ DNS
         driver.get("https://www.dns-shop.ru/");
 
-        //Нажать кнопку Всё верно
-        WebElement allRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        //РќР°Р¶Р°С‚СЊ РєРЅРѕРїРєСѓ Р’СЃС‘ РІРµСЂРЅРѕ
+        WebElement allRight = driver.findElement(By.xpath("//span[text()='Р’СЃС‘ РІРµСЂРЅРѕ']"));
         allRight.click();
         try {
             Thread.sleep(2000);
@@ -113,52 +113,52 @@ public class FirstCaseTest {
             e.printStackTrace();
         }
 
-        //Навести курсор на ссылку Бытовая техника
-        WebElement appliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
+        //РќР°РІРµСЃС‚Рё РєСѓСЂСЃРѕСЂ РЅР° СЃСЃС‹Р»РєСѓ Р‘С‹С‚РѕРІР°СЏ С‚РµС…РЅРёРєР°
+        WebElement appliances = driver.findElement(By.xpath("//a[text()='Р‘С‹С‚РѕРІР°СЏ С‚РµС…РЅРёРєР°']"));
         Actions actions = new Actions(driver);
         actions
                 .moveToElement(appliances)
                 .perform();
 
-        //Проверить, что отображаются ссылки:
-        //Техника для кухни
-        WebElement kitchen = driver.findElement(By.xpath("//a[text()='Техника для кухни']"));
-        Assertions.assertTrue(kitchen.isDisplayed(), "Ссылка Техника для кухни не отображается");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°СЋС‚СЃСЏ СЃСЃС‹Р»РєРё:
+        //РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё
+        WebElement kitchen = driver.findElement(By.xpath("//a[text()='РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё']"));
+        Assertions.assertTrue(kitchen.isDisplayed(), "РЎСЃС‹Р»РєР° РўРµС…РЅРёРєР° РґР»СЏ РєСѓС…РЅРё РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ");
 
-        //Техника для дома
-        WebElement house = driver.findElement(By.xpath("//a[text()='Техника для дома']"));
-        Assertions.assertTrue(house.isDisplayed(), "Ссылка Техника для дома не отображается");
+        //РўРµС…РЅРёРєР° РґР»СЏ РґРѕРјР°
+        WebElement house = driver.findElement(By.xpath("//a[text()='РўРµС…РЅРёРєР° РґР»СЏ РґРѕРјР°']"));
+        Assertions.assertTrue(house.isDisplayed(), "РЎСЃС‹Р»РєР° РўРµС…РЅРёРєР° РґР»СЏ РґРѕРјР° РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ");
 
-        //Красота и здоровье
-        WebElement health = driver.findElement(By.xpath("//a[text()='Красота и здоровье']"));
-        Assertions.assertTrue(health.isDisplayed(), "Ссылка Красота и здоровье не отображается");
+        //РљСЂР°СЃРѕС‚Р° Рё Р·РґРѕСЂРѕРІСЊРµ
+        WebElement health = driver.findElement(By.xpath("//a[text()='РљСЂР°СЃРѕС‚Р° Рё Р·РґРѕСЂРѕРІСЊРµ']"));
+        Assertions.assertTrue(health.isDisplayed(), "РЎСЃС‹Р»РєР° РљСЂР°СЃРѕС‚Р° Рё Р·РґРѕСЂРѕРІСЊРµ РЅРµ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ");
 
-        //Навести курсор на ссылку Приготовление пищи
-        WebElement cookingFood = driver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
+        //РќР°РІРµСЃС‚Рё РєСѓСЂСЃРѕСЂ РЅР° СЃСЃС‹Р»РєСѓ РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё
+        WebElement cookingFood = driver.findElement(By.xpath("//a[text()='РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё']"));
         actions
                 .moveToElement(cookingFood)
                 .perform();
 
-        //Проверить, что количество ссылок в подменю Приготовление пищи больше 5
-        List<WebElement> popupCookingFood = driver.findElements(By.xpath("//a[text()='Приготовление пищи']//a"));
-        Assertions.assertTrue(popupCookingFood.size() > 5, "Количество ссылок в подменю Приготовление пищи меньше или равно 5");
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃСЃС‹Р»РѕРє РІ РїРѕРґРјРµРЅСЋ РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё Р±РѕР»СЊС€Рµ 5
+        List<WebElement> popupCookingFood = driver.findElements(By.xpath("//a[text()='РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё']//a"));
+        Assertions.assertTrue(popupCookingFood.size() > 5, "РљРѕР»РёС‡РµСЃС‚РІРѕ СЃСЃС‹Р»РѕРє РІ РїРѕРґРјРµРЅСЋ РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 5");
 
-        //Навести курсор на ссылку Плиты
-        //Перейти по ссылке Плиты
-        WebElement stoves = driver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
+        //РќР°РІРµСЃС‚Рё РєСѓСЂСЃРѕСЂ РЅР° СЃСЃС‹Р»РєСѓ РџР»РёС‚С‹
+        //РџРµСЂРµР№С‚Рё РїРѕ СЃСЃС‹Р»РєРµ РџР»РёС‚С‹
+        WebElement stoves = driver.findElement(By.xpath("//a[text()='РџСЂРёРіРѕС‚РѕРІР»РµРЅРёРµ РїРёС‰Рё']//a[text()='РџР»РёС‚С‹']"));
         actions
                 .moveToElement(stoves)
                 .click()
                 .perform();
 
-        //Перейти по ссылке Плиты электрические
-        WebElement electricStoves = driver.findElement(By.xpath("//span[text()='Плиты электрические']"));
+        //РџРµСЂРµР№С‚Рё РїРѕ СЃСЃС‹Р»РєРµ РџР»РёС‚С‹ СЌР»РµРєС‚СЂРёС‡РµСЃРєРёРµ
+        WebElement electricStoves = driver.findElement(By.xpath("//span[text()='РџР»РёС‚С‹ СЌР»РµРєС‚СЂРёС‡РµСЃРєРёРµ']"));
         electricStoves.click();
 
-        //Проверить, что в тексте Плиты электрические [количество] товаров количество товаров больше 100
+        //РџСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РІ С‚РµРєСЃС‚Рµ РџР»РёС‚С‹ СЌР»РµРєС‚СЂРёС‡РµСЃРєРёРµ [РєРѕР»РёС‡РµСЃС‚РІРѕ] С‚РѕРІР°СЂРѕРІ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂРѕРІ Р±РѕР»СЊС€Рµ 100
         WebElement productsCount = driver.findElement(By.xpath("//span[@class='products-count']"));
         String[] text = productsCount.getText().split(" ");
         int count = Integer.parseInt(text[0]);
-        Assertions.assertTrue(count > 100, "в тексте Плиты электрические [количество] товаров количество товаров меньше или равно 100");
+        Assertions.assertTrue(count > 100, "РІ С‚РµРєСЃС‚Рµ РџР»РёС‚С‹ СЌР»РµРєС‚СЂРёС‡РµСЃРєРёРµ [РєРѕР»РёС‡РµСЃС‚РІРѕ] С‚РѕРІР°СЂРѕРІ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂРѕРІ РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 100");
     }
 }

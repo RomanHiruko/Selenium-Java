@@ -22,7 +22,7 @@ public class WebDriverFactory {
                 options.addArguments("--incognito");
                 options.setPageLoadStrategy(PageLoadStrategy.valueOf(loadStrategy));
                 //options.setImplicitWaitTimeout(Duration.ofSeconds(5));
-                logger.info("Драйвер для браузера Google Chrome");
+                logger.info("Р”СЂР°Р№РІРµСЂ РґР»СЏ Р±СЂР°СѓР·РµСЂР° Google Chrome");
                 return new ChromeDriver(options);
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
@@ -31,10 +31,10 @@ public class WebDriverFactory {
                 options1.addArguments("--incognito");
                 options1.setPageLoadStrategy(PageLoadStrategy.valueOf(loadStrategy));
                 //options1.setImplicitWaitTimeout(Duration.ofSeconds(5));
-                logger.info("Драйвер для Mozilla Firefox");
+                logger.info("Р”СЂР°Р№РІРµСЂ РґР»СЏ Mozilla Firefox");
                 return new FirefoxDriver(options1);
             default:
-                throw new RuntimeException("Введено некорректное название браузера");
+                throw new RuntimeException("Р’РІРµРґРµРЅРѕ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РЅР°Р·РІР°РЅРёРµ Р±СЂР°СѓР·РµСЂР°");
         }
     }
 }
