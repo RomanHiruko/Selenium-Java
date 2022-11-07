@@ -29,6 +29,7 @@ public class FirstCaseTest {
         logger.info("load strategy = " + loadStrategy);
         driver = WebDriverFactory.getDriver(env.toLowerCase(), loadStrategy.toUpperCase());
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         logger.info("Драйвер стартовал");
     }
 
@@ -60,8 +61,8 @@ public class FirstCaseTest {
         logger.info("Window size: " + size);
 
         //Нажать кнопку Всё верно
-        WebElement allRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        allRight.click();
+        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        ButtonEverythingIsRight.click();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -69,33 +70,33 @@ public class FirstCaseTest {
         }
 
         //Перейти по ссылке Бытовая техника
-        WebElement appliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
-        appliances.click();
+        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
+        linkAppliances.click();
 
         //Проверить, что отображается текст Бытовая кухня
-        WebElement appliancesTitle = driver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
-        Assertions.assertTrue(appliancesTitle.isDisplayed(), "Заголовок не отображается!");
+        WebElement textAppliancesTitle = driver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
+        Assertions.assertTrue(textAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
 
         //Перейти по ссылке Техника для кухни
-        WebElement kitchenAppliances = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
-        kitchenAppliances.click();
+        WebElement linkKitchenAppliances = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
+        linkKitchenAppliances.click();
 
         //Проверить, что отображается текст Техника для кухни
-        WebElement kitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
-        Assertions.assertTrue(kitchenAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
+        WebElement textKitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
+        Assertions.assertTrue(textKitchenAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
 
         //Проверить, что отображается ссылка Собрать свою кухню
-        WebElement makeKitchen = driver.findElement(By.xpath("//a[text()='Собрать свою кухню']"));
-        Assertions.assertTrue(makeKitchen.isDisplayed(), "Ссылка не отображается");
+        WebElement linkMakeKitchen = driver.findElement(By.xpath("//a[text()='Собрать свою кухню']"));
+        Assertions.assertTrue(linkMakeKitchen.isDisplayed(), "Ссылка не отображается");
 
         //Вывести в логи названия всех категорий
-        List<WebElement> allCategories = driver.findElements(By.xpath("//div[@class='subcategory__item-container ']//span"));
-        for (WebElement category : allCategories) {
+        List<WebElement> textAllCategories = driver.findElements(By.xpath("//div[@class='subcategory__item-container ']//span"));
+        for (WebElement category : textAllCategories) {
             logger.info("Категория: " + category.getText());
         }
 
         //Проверить, что количество категорий больше 5
-        Assertions.assertTrue(allCategories.size() > 5, "Количество категорий меньше или равно 5");
+        Assertions.assertTrue(textAllCategories.size() > 5, "Количество категорий меньше или равно 5");
     }
 
     @Test
@@ -105,8 +106,8 @@ public class FirstCaseTest {
         driver.get("https://www.dns-shop.ru/");
 
         //Нажать кнопку Всё верно
-        WebElement allRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        allRight.click();
+        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        ButtonEverythingIsRight.click();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -114,30 +115,28 @@ public class FirstCaseTest {
         }
 
         //Навести курсор на ссылку Бытовая техника
-        WebElement appliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
+        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
         Actions actions = new Actions(driver);
         actions
-                .moveToElement(appliances)
+                .moveToElement(linkAppliances)
                 .perform();
 
         //Проверить, что отображаются ссылки:
         //Техника для кухни
-        WebElement kitchen = driver.findElement(By.xpath("//a[text()='Техника для кухни']"));
-        Assertions.assertTrue(kitchen.isDisplayed(), "Ссылка Техника для кухни не отображается");
+        WebElement linkKitchenAppliances = driver.findElement(By.xpath("//a[text()='Техника для кухни']"));
+        Assertions.assertTrue(linkKitchenAppliances.isDisplayed(), "Ссылка Техника для кухни не отображается");
 
         //Техника для дома
-        WebElement house = driver.findElement(By.xpath("//a[text()='Техника для дома']"));
-        Assertions.assertTrue(house.isDisplayed(), "Ссылка Техника для дома не отображается");
+        WebElement linkHouseAppliances = driver.findElement(By.xpath("//a[text()='Техника для дома']"));
+        Assertions.assertTrue(linkHouseAppliances.isDisplayed(), "Ссылка Техника для дома не отображается");
 
         //Красота и здоровье
-        WebElement health = driver.findElement(By.xpath("//a[text()='Красота и здоровье']"));
-        Assertions.assertTrue(health.isDisplayed(), "Ссылка Красота и здоровье не отображается");
+        WebElement linkBeautyAndHealth = driver.findElement(By.xpath("//a[text()='Красота и здоровье']"));
+        Assertions.assertTrue(linkBeautyAndHealth.isDisplayed(), "Ссылка Красота и здоровье не отображается");
 
         //Навести курсор на ссылку Приготовление пищи
-        WebElement cookingFood = driver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
-        actions
-                .moveToElement(cookingFood)
-                .perform();
+        WebElement linkCookingFood = driver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
+        actions.moveToElement(linkCookingFood).perform();
 
         //Проверить, что количество ссылок в подменю Приготовление пищи больше 5
         List<WebElement> popupCookingFood = driver.findElements(By.xpath("//a[text()='Приготовление пищи']//a"));
@@ -145,19 +144,16 @@ public class FirstCaseTest {
 
         //Навести курсор на ссылку Плиты
         //Перейти по ссылке Плиты
-        WebElement stoves = driver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
-        actions
-                .moveToElement(stoves)
-                .click()
-                .perform();
+        WebElement linkStoves = driver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
+        actions.moveToElement(linkStoves).click().perform();
 
         //Перейти по ссылке Плиты электрические
-        WebElement electricStoves = driver.findElement(By.xpath("//span[text()='Плиты электрические']"));
-        electricStoves.click();
+        WebElement linkElectricStoves = driver.findElement(By.xpath("//span[text()='Плиты электрические']"));
+        linkElectricStoves.click();
 
         //Проверить, что в тексте Плиты электрические [количество] товаров количество товаров больше 100
-        WebElement productsCount = driver.findElement(By.xpath("//span[@class='products-count']"));
-        String[] text = productsCount.getText().split(" ");
+        WebElement textProductsCount = driver.findElement(By.xpath("//span[@class='products-count']"));
+        String[] text = textProductsCount.getText().split(" ");
         int count = Integer.parseInt(text[0]);
         Assertions.assertTrue(count > 100, "в тексте Плиты электрические [количество] товаров количество товаров меньше или равно 100");
     }
