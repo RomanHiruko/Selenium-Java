@@ -8,6 +8,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.time.Duration;
+
 public class WebDriverFactory {
     private static Logger logger = LogManager.getLogger(WebDriverFactory.class);
 
@@ -21,14 +23,14 @@ public class WebDriverFactory {
                 options.addArguments("--start-maximized");
                 options.addArguments("--incognito");
                 options.setPageLoadStrategy(PageLoadStrategy.valueOf(loadStrategy));
-                //options.setImplicitWaitTimeout(Duration.ofSeconds(5));
+                //options.setPageLoadTimeout(Duration.ofSeconds(5));
                 logger.info("Драйвер для браузера Google Chrome");
                 return new ChromeDriver(options);
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions options1 = new FirefoxOptions();
-                options1.addArguments("--start-maximized");
-                options1.addArguments("--incognito");
+                options1.addArguments("--kiosk");
+                options1.addArguments("-private");
                 options1.setPageLoadStrategy(PageLoadStrategy.valueOf(loadStrategy));
                 //options1.setImplicitWaitTimeout(Duration.ofSeconds(5));
                 logger.info("Драйвер для Mozilla Firefox");
