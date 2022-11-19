@@ -9,6 +9,9 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
@@ -28,8 +31,6 @@ public class FirstCaseTest {
         logger.info("env = " + env);
         logger.info("load strategy = " + loadStrategy);
         driver = WebDriverFactory.getDriver(env.toLowerCase(), loadStrategy.toUpperCase());
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         logger.info("Драйвер стартовал");
     }
 
@@ -43,6 +44,10 @@ public class FirstCaseTest {
 
     @Test
     public void categoriesTest() {
+        //Регистрация слушателя событий
+        ListenersTest listener = new ListenersTest();
+        WebDriver eventFiringWebDriver = new EventFiringDecorator<>(listener).decorate(driver);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
 
         //Открыть страницу DNS
         driver.get("https://www.dns-shop.ru/");
@@ -61,36 +66,33 @@ public class FirstCaseTest {
         logger.info("Window size: " + size);
 
         //Нажать кнопку Всё верно
-        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        ButtonEverythingIsRight.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebElement buttonEverythingIsRight = eventFiringWebDriver.findElement(By.xpath("//span[text()='Всё верно']"));
+        buttonEverythingIsRight.click();
 
         //Перейти по ссылке Бытовая техника
-        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
+        driver.navigate().refresh();
+        By linkAppliancesXpath = By.xpath("//a[text()='Бытовая техника']");
+        WebElement linkAppliances = eventFiringWebDriver.findElement(linkAppliancesXpath);
         linkAppliances.click();
 
         //Проверить, что отображается текст Бытовая кухня
-        WebElement textAppliancesTitle = driver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
+        WebElement textAppliancesTitle = eventFiringWebDriver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
         Assertions.assertTrue(textAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
 
         //Перейти по ссылке Техника для кухни
-        WebElement linkKitchenAppliances = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
+        WebElement linkKitchenAppliances = eventFiringWebDriver.findElement(By.xpath("//span[text()='Техника для кухни']"));
         linkKitchenAppliances.click();
 
         //Проверить, что отображается текст Техника для кухни
-        WebElement textKitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
+        WebElement textKitchenAppliancesTitle = eventFiringWebDriver.findElement(By.xpath("//span[text()='Техника для кухни']"));
         Assertions.assertTrue(textKitchenAppliancesTitle.isDisplayed(), "Заголовок не отображается!");
 
         //Проверить, что отображается ссылка Собрать свою кухню
-        WebElement linkMakeKitchen = driver.findElement(By.xpath("//a[text()='Собрать свою кухню']"));
+        WebElement linkMakeKitchen = eventFiringWebDriver.findElement(By.xpath("//a[text()='Собрать свою кухню']"));
         Assertions.assertTrue(linkMakeKitchen.isDisplayed(), "Ссылка не отображается");
 
         //Вывести в логи названия всех категорий
-        List<WebElement> textAllCategories = driver.findElements(By.xpath("//div[@class='subcategory__item-container ']//span"));
+        List<WebElement> textAllCategories = eventFiringWebDriver.findElements(By.xpath("//div[@class='subcategory__item-container ']//span"));
         for (WebElement category : textAllCategories) {
             logger.info("Категория: " + category.getText());
         }
@@ -101,22 +103,24 @@ public class FirstCaseTest {
 
     @Test
     public void cookingTest() {
+        //Регистрация слушателя событий
+        ListenersTest listener = new ListenersTest();
+        WebDriver eventFiringWebDriver = new EventFiringDecorator<>(listener).decorate(driver);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
 
         //Открыть страницу DNS
         driver.get("https://www.dns-shop.ru/");
 
         //Нажать кнопку Всё верно
-        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        ButtonEverythingIsRight.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebElement buttonEverythingIsRight = eventFiringWebDriver.findElement(By.xpath("//span[text()='Всё верно']"));
+        buttonEverythingIsRight.click();
 
         //Навести курсор на ссылку Бытовая техника
-        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
-        Actions actions = new Actions(driver);
+        driver.navigate().refresh();
+        By linkAppliancesXpath = By.xpath("//a[text()='Бытовая техника']");
+        wait.until(ExpectedConditions.elementToBeClickable(linkAppliancesXpath));
+        WebElement linkAppliances = eventFiringWebDriver.findElement(linkAppliancesXpath);
+        Actions actions = new Actions(eventFiringWebDriver);
         actions
                 .moveToElement(linkAppliances)
                 .perform();
@@ -135,7 +139,7 @@ public class FirstCaseTest {
         Assertions.assertTrue(linkBeautyAndHealth.isDisplayed(), "Ссылка Красота и здоровье не отображается");
 
         //Навести курсор на ссылку Приготовление пищи
-        WebElement linkCookingFood = driver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
+        WebElement linkCookingFood = eventFiringWebDriver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
         actions.moveToElement(linkCookingFood).perform();
 
         //Проверить, что количество ссылок в подменю Приготовление пищи больше 5
@@ -144,11 +148,11 @@ public class FirstCaseTest {
 
         //Навести курсор на ссылку Плиты
         //Перейти по ссылке Плиты
-        WebElement linkStoves = driver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
+        WebElement linkStoves = eventFiringWebDriver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
         actions.moveToElement(linkStoves).click().perform();
 
         //Перейти по ссылке Плиты электрические
-        WebElement linkElectricStoves = driver.findElement(By.xpath("//span[text()='Плиты электрические']"));
+        WebElement linkElectricStoves = eventFiringWebDriver.findElement(By.xpath("//span[text()='Плиты электрические']"));
         linkElectricStoves.click();
 
         //Проверить, что в тексте Плиты электрические [количество] товаров количество товаров больше 100
