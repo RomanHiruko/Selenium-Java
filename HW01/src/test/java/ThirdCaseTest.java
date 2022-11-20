@@ -30,6 +30,23 @@ public class ThirdCaseTest {
     //Чтение передаваемого параметра loadStrategy (-DloadStrategy)
     String loadStrategy = System.getProperty("loadStrategy", "normal");
 
+    public void makeScreenshot() {
+        try {
+            Actions actions = new Actions(driver);
+            actions
+                    .sendKeys(Keys.END)
+                    .sendKeys(Keys.HOME)
+                    .perform();
+            Screenshot screenshot = new AShot()
+                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
+                    .takeScreenshot(driver);
+            ImageIO.write(screenshot.getImage(), "png", new File("temp\\ThirdCaseScreen_" + number + ".png"));
+            number += 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @BeforeEach
     public void setUp() {
         logger.info("Env = " + env);
@@ -51,30 +68,18 @@ public class ThirdCaseTest {
         //Регистрация слушателя событий
         ListenersTest listener = new ListenersTest();
         WebDriver eventFiringWebDriver = new EventFiringDecorator<>(listener).decorate(driver);
+
         //Открыть сайт DNS
         eventFiringWebDriver.get("https://www.dns-shop.ru/");
-        WebDriverWait wait = new WebDriverWait(eventFiringWebDriver, Duration.ofSeconds(100));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+        Actions actions = new Actions(driver);
 
         //Сделать скриншот всей страницы после загрузки страницы
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Навести курсор на ссылку Компьютеры и периферия
         By linkPcAndPeripheralXpath = By.xpath("//a[text()='Компьютеры и периферия']");
-        WebElement linkPcAndPeripheral = driver.findElement(linkPcAndPeripheralXpath);
-        Actions actions = new Actions(driver);
+        WebElement linkPcAndPeripheral = eventFiringWebDriver.findElement(linkPcAndPeripheralXpath);
         actions
                 .moveToElement(linkPcAndPeripheral)
                 .perform();
@@ -82,66 +87,26 @@ public class ThirdCaseTest {
         //Сделать скриншот всей страницы после открытия меню
         By submenu = By.xpath("//a[text()='Ноутбуки и аксессуары']");
         wait.until(ExpectedConditions.elementToBeClickable(submenu));
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Перейти по ссылке Ноутбуки
-        Actions actions1 = new Actions(driver);
-        actions1
+        actions
                 .moveToElement(linkPcAndPeripheral)
                 .perform();
         By linkNotebooksXpath = By.xpath("//a[text()='Ноутбуки']");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(linkNotebooksXpath));
-        WebElement linkNotebooks = eventFiringWebDriver.findElement(linkNotebooksXpath);
+        WebElement linkNotebooks = driver.findElement(linkNotebooksXpath);
+        wait.until(ExpectedConditions.elementToBeClickable(linkNotebooksXpath));
         linkNotebooks.click();
 
         //Сделать скриншот всей страницы после загрузки страницы
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Скрыть блок страницы
         JavascriptExecutor js = (JavascriptExecutor) eventFiringWebDriver;
         js.executeScript("return document.getElementsByClassName('header-bottom slide')[0].remove();");
 
         //Сделать скриншот всей страницы после скрытия блока
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Выбрать в фильтре Производитель значение ASUS
         WebElement checkboxAsus = eventFiringWebDriver.findElement(By.xpath("//span[text()='ASUS  ']/.." +
@@ -160,20 +125,7 @@ public class ThirdCaseTest {
         buttonAccept.click();
 
         //Сделать скриншот всей страницы после применения фильтров
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Применить сортировку Сначала дорогие
         WebElement dropdownSorting = eventFiringWebDriver.findElement(By.xpath("//span[text()='Сначала недорогие']"));
@@ -184,20 +136,7 @@ public class ThirdCaseTest {
         //Сделать скриншот всей страницы после применения сортировки
         WebElement catalog = eventFiringWebDriver.findElement(By.xpath("//div[@class='products-list__content']"));
         wait.until(ExpectedConditions.domPropertyToBe(catalog, "style", "[]"));
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Перейти на страницу первого продукта в списке
         //Страница открывается в новом окне
@@ -212,20 +151,7 @@ public class ThirdCaseTest {
         String newWindow = eventFiringWebDriver.getWindowHandle();
 
         //Сделать скриншот всей страницы после загрузки страницы
-        try {
-            Actions actionsScreen = new Actions(driver);
-            actionsScreen
-                    .sendKeys(Keys.END)
-                    .sendKeys(Keys.HOME)
-                    .perform();
-            Screenshot screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FullPage_" + number + ".png"));
-            number += 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        makeScreenshot();
 
         //Проверить, что заголовок страницы соответствует ожидаемому
         //Название соответствует названию в списке на предыдущей странице
@@ -240,8 +166,7 @@ public class ThirdCaseTest {
         eventFiringWebDriver.switchTo().window(newWindow);
         By buttonXpath = By.xpath("//button[text()='Развернуть все']");
         WebElement button = eventFiringWebDriver.findElement(buttonXpath);
-        Actions actions2 = new Actions(driver);
-        actions2
+        actions
                 .moveToElement(button)
                 .perform();
         button.click();
