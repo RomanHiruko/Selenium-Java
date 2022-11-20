@@ -4,18 +4,24 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
 public class FirstCaseTest {
     protected static WebDriver driver;
     private Logger logger = LogManager.getLogger(FirstCaseTest.class);
+    private static int number = 1;
 
     // Чтение передаваемого параметра browser (-Dbrowser)
     String env = System.getProperty("browser", "chrome");
@@ -23,13 +29,28 @@ public class FirstCaseTest {
     //Чтение передаваемого параметра loadStrategy (-DloadStrategy)
     String loadStrategy = System.getProperty("loadStrategy", "normal");
 
+    public void makeScreenshot() {
+        try {
+            Actions actions = new Actions(driver);
+            actions
+                    .sendKeys(Keys.END)
+                    .sendKeys(Keys.HOME)
+                    .perform();
+            Screenshot screenshot = new AShot()
+                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
+                    .takeScreenshot(driver);
+            ImageIO.write(screenshot.getImage(), "png", new File("temp\\FirstCaseScreen_" + number + ".png"));
+            number += 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @BeforeEach
     public void setUp() {
         logger.info("env = " + env);
         logger.info("load strategy = " + loadStrategy);
         driver = WebDriverFactory.getDriver(env.toLowerCase(), loadStrategy.toUpperCase());
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         logger.info("Драйвер стартовал");
     }
 
@@ -43,9 +64,12 @@ public class FirstCaseTest {
 
     @Test
     public void categoriesTest() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+        Actions actions = new Actions(driver);
 
         //Открыть страницу DNS
         driver.get("https://www.dns-shop.ru/");
+        makeScreenshot();
 
         //Вывести в логи:
         //заголовок страницы
@@ -61,17 +85,22 @@ public class FirstCaseTest {
         logger.info("Window size: " + size);
 
         //Нажать кнопку Всё верно
-        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        ButtonEverythingIsRight.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebElement buttonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        actions
+                .moveToElement(buttonEverythingIsRight)
+                .click()
+                .perform();
+        makeScreenshot();
 
         //Перейти по ссылке Бытовая техника
-        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
-        linkAppliances.click();
+        driver.navigate().refresh();
+        By linkAppliancesXpath = By.xpath("//a[text()='Бытовая техника']");
+        WebElement linkAppliances = driver.findElement(linkAppliancesXpath);
+        actions
+                .moveToElement(linkAppliances)
+                .click()
+                .perform();
+        makeScreenshot();
 
         //Проверить, что отображается текст Бытовая кухня
         WebElement textAppliancesTitle = driver.findElement(By.xpath("//h1[text()='Бытовая техника']"));
@@ -79,7 +108,10 @@ public class FirstCaseTest {
 
         //Перейти по ссылке Техника для кухни
         WebElement linkKitchenAppliances = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
-        linkKitchenAppliances.click();
+        actions
+                .moveToElement(linkKitchenAppliances)
+                .click()
+                .perform();
 
         //Проверить, что отображается текст Техника для кухни
         WebElement textKitchenAppliancesTitle = driver.findElement(By.xpath("//span[text()='Техника для кухни']"));
@@ -101,25 +133,30 @@ public class FirstCaseTest {
 
     @Test
     public void cookingTest() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+        Actions actions = new Actions(driver);
 
         //Открыть страницу DNS
         driver.get("https://www.dns-shop.ru/");
+        makeScreenshot();
 
         //Нажать кнопку Всё верно
-        WebElement ButtonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
-        ButtonEverythingIsRight.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebElement buttonEverythingIsRight = driver.findElement(By.xpath("//span[text()='Всё верно']"));
+        actions
+                .moveToElement(buttonEverythingIsRight)
+                .click()
+                .perform();
+        makeScreenshot();
 
         //Навести курсор на ссылку Бытовая техника
-        WebElement linkAppliances = driver.findElement(By.xpath("//a[text()='Бытовая техника']"));
-        Actions actions = new Actions(driver);
+        driver.navigate().refresh();
+        By linkAppliancesXpath = By.xpath("//a[text()='Бытовая техника']");
+        wait.until(ExpectedConditions.elementToBeClickable(linkAppliancesXpath));
+        WebElement linkAppliances = driver.findElement(linkAppliancesXpath);
         actions
                 .moveToElement(linkAppliances)
                 .perform();
+        makeScreenshot();
 
         //Проверить, что отображаются ссылки:
         //Техника для кухни
@@ -137,6 +174,7 @@ public class FirstCaseTest {
         //Навести курсор на ссылку Приготовление пищи
         WebElement linkCookingFood = driver.findElement(By.xpath("//a[text()='Приготовление пищи']"));
         actions.moveToElement(linkCookingFood).perform();
+        makeScreenshot();
 
         //Проверить, что количество ссылок в подменю Приготовление пищи больше 5
         List<WebElement> popupCookingFood = driver.findElements(By.xpath("//a[text()='Приготовление пищи']//a"));
@@ -146,10 +184,12 @@ public class FirstCaseTest {
         //Перейти по ссылке Плиты
         WebElement linkStoves = driver.findElement(By.xpath("//a[text()='Приготовление пищи']//a[text()='Плиты']"));
         actions.moveToElement(linkStoves).click().perform();
+        makeScreenshot();
 
         //Перейти по ссылке Плиты электрические
         WebElement linkElectricStoves = driver.findElement(By.xpath("//span[text()='Плиты электрические']"));
         linkElectricStoves.click();
+        makeScreenshot();
 
         //Проверить, что в тексте Плиты электрические [количество] товаров количество товаров больше 100
         WebElement textProductsCount = driver.findElement(By.xpath("//span[@class='products-count']"));
