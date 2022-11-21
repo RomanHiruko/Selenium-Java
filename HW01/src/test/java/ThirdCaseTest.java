@@ -78,7 +78,7 @@ public class ThirdCaseTest {
         makeScreenshot();
 
         //Навести курсор на ссылку Компьютеры и периферия
-        By linkPcAndPeripheralXpath = By.xpath("//a[text()='Компьютеры и периферия']");
+        By linkPcAndPeripheralXpath = By.xpath("//a[text()='ПК, ноутбуки, периферия']");
         WebElement linkPcAndPeripheral = eventFiringWebDriver.findElement(linkPcAndPeripheralXpath);
         actions
                 .moveToElement(linkPcAndPeripheral)
